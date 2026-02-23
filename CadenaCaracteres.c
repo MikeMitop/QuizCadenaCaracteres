@@ -9,28 +9,45 @@ int afd(char *str) {
     while (str[i] != '\0' && str[i] != '\n') {
         char c = str[i];
         switch (estado) {
+
             case 0:
-                if (isalpha(c)) estado = 1;
-                else if (isdigit(c)) estado = 2;
-                else if (c == '+') estado = 3;
+                if (isalpha((unsigned char)c))       estado = 1;
+                else if (isdigit((unsigned char)c))  estado = 2;
+                else if (c == '+')                   estado = 3;
                 else return 0;
                 break;
-            case 1: // ID
-                if (!isalnum(c)) return 0;
+            case 1:
+
+                if (islower((unsigned char)c))       estado = 5;
+                else return 0;
                 break;
-            case 2: // Entero
-                if (!isdigit(c)) return 0;
+            case 2:
+
+                if (!isdigit((unsigned char)c)) return 0;
                 break;
-            case 3: // Suma -> Incremento
+            case 3:
+
                 if (c == '+') estado = 4;
                 else return 0;
                 break;
-            case 4: // Final de Incremento
+            case 4:
+
                 return 0;
+            case 5:
+
+                if (isdigit((unsigned char)c)) estado = 6;
+                else return 0;
+                break;
+            case 6:
+
+                if (islower((unsigned char)c)) estado = 5;
+                else return 0;
+                break;
         }
+        
         i++;
     }
-    return (estado >= 1 && estado <= 4);
+    return (estado == 1 || estado == 6 || estado == 2 || estado == 3 || estado == 4);
 }
 
 int main() {
@@ -40,8 +57,8 @@ int main() {
         return 1;
     }
 
-    char palabra[100];
-    while (fscanf(archivo, "%s", palabra) != EOF) {
+    char palabra[512];
+    while (fscanf(archivo, "%511s", palabra) != EOF) {
         if (afd(palabra)) printf("%s: ACEPTA\n", palabra);
         else printf("%s: NO ACEPTA\n", palabra);
     }
