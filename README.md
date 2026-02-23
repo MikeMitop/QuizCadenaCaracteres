@@ -32,6 +32,31 @@ CadenaCaracteres/
 
 ---
 
+## Explicación del Algoritmo:
+
+El AFD funciona como una máquina de estados: parte siempre en q0 y con cada carácter leído decide a qué estado moverse. Si en algún momento no hay transición válida, rechaza inmediatamente. Al terminar la cadena, el estado en el que quedó determina si acepta o no.
+
+```c
+int estado = 0;   // siempre arranca en q0
+int i = 0;        // índice del carácter actual
+```
+
+El autómata no tiene memoria del pasado, solo importa el estado actual y el carácter que llega.
+
+Se recorre la cadena carácter a carácter hasta llegar a '\0' (fin de cadena):
+
+```
+while (str[i] != '\0') {
+    char c = str[i];
+    // aplicar función delta(estado, c)
+    i++;
+}
+```
+
+En cada iteración se aplica la función de transición δ(estado, c):
+
+**(estado actual, carácter leído) → nuevo estado**
+
 
 
 ---
